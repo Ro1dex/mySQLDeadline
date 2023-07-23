@@ -12,7 +12,6 @@ public class AuthCodeLoginTest {
     @Test
     void shouldTransferMoneyBetweenOwnCards() {
         open("http://localhost:9999");
-        int value = 1000;
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
