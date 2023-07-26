@@ -48,7 +48,7 @@ public class AuthCodeLoginTest {
             open("http://localhost:9999");
             verificationPage = loginPage.validLogin(authInfo);
         }
-        verificationPage.invalidVerify();
+        verificationPage.validVerify();
         $("[data-test-id=error-notification]").shouldHave(text("Превышено количество попыток ввода кода!")).shouldBe(visible);
     }
     // удаление базы данных
