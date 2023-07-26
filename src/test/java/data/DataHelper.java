@@ -23,16 +23,20 @@ public class DataHelper {
     }
 /*
 
-    public static Card1 getCardInfo1() {
-        return new Card1("5559 0000 0000 0001");
-    }
-    public static Card2 getCardInfo2() {
-        return new Card2("5559 0000 0000 0002");
-    }
+ public static Card1 getCardInfo1() {
+     return new Card1("5559 0000 0000 0001");
+ }
+ public static Card2 getCardInfo2() {
+     return new Card2("5559 0000 0000 0002");
+ }
 */
 
     public static AuthInfo getAuthInfo() {
         return new AuthInfo("vasya", "qwerty123");
+    }
+    @Value
+    public static class VerificationCode{
+        String code;
     }
 
 }

@@ -1,35 +1,39 @@
 package data;
 
+import com.github.javafaker.Faker;
 import lombok.SneakyThrows;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.*;
 
 public class AuthCode {
-    public static Connection conn;
+    private static final QueryRunner runner = new QueryRunner();
 
     public AuthCode() {
-        try {
-            String url = "jdbc:mysql://localhost:3306/app";
-            conn = DriverManager.getConnection(url, "app", "pass");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    }
+    public static Connection getConn() throws SQLException{
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
     }
     @SneakyThrows
-    public static String getCode() {
-        String code = null;
-        String query = "SELECT code FROM auth_codes WHERE user_id = (SELECT id FROM users WHERE login = ?)";
-
-        try (PreparedStatement statement = conn.prepareStatement(query)) {
-            statement.setString(1, DataHelper.getAuthInfo().getLogin());
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                code = resultSet.getString("code");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Ошибка при получении кода из базы данных", e);
-        }
-        return code;
+    public static DataHelper.VerificationCode getValidCode() {
+        var conn = getConn();
+        var codeSQL = "SELECT code FROM auth_codes ORDER BY created DESC LIMIT 1";
+        var code = runner.query(conn, codeSQL, new ScalarHandler<String>());
+        return new DataHelper.VerificationCode(code);
+    }
+    public static DataHelper.VerificationCode getInvalidCode(){
+         var faker = new Faker();
+        String code = faker.numerify("######");
+        return new DataHelper.VerificationCode(code);
+    }
+    @SneakyThrows
+    public static void cleanDB(){
+        var connection =getConn();
+        runner.execute(connection, "DELETE FROM auth_codes");
+        runner.execute(connection, "DELETE FROM card_transactions");
+        runner.execute(connection, "DELETE FROM cards");
+        runner.execute(connection, "DELETE FROM users");
     }
 
 }

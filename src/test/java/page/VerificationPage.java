@@ -1,6 +1,7 @@
 package page;
 import com.codeborne.selenide.SelenideElement;
 import data.AuthCode;
+import data.DataHelper;
 
 
 import static com.codeborne.selenide.Condition.visible;
@@ -14,9 +15,15 @@ public class VerificationPage {
         codeField.shouldBe(visible);
     }
     public DashboardPage validVerify(){
-        codeField.setValue(AuthCode.getCode());
+        codeField.clear();
+        codeField.setValue(AuthCode.getValidCode().getCode());
         verifyButton.click();
         return new DashboardPage();
+    }
+    public  void invalidVerify(){
+        codeField.clear();
+        codeField.setValue(AuthCode.getInvalidCode().getCode());
+        verifyButton.click();
     }
 
 }
