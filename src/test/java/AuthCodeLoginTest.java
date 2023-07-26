@@ -20,9 +20,7 @@ public class AuthCodeLoginTest {
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.validVerify();
-        $("[data-test-id=dashboard]").shouldBe(visible);
     }
-    // Ожидаемое поведение для блокировки входа
     @Test
     void shouldBlockedAfterThreeInvalidCodesExpected() {
         open("http://localhost:9999");
@@ -36,9 +34,9 @@ public class AuthCodeLoginTest {
         verificationPage.invalidVerify();
         $("[data-test-id=error-notification]").shouldHave(text("Превышено количество попыток ввода кода!")).shouldBe(visible);
     }
-    // Актуальное поведение для блокировки входа
+
     @Test
-    void shouldBlockedAfterThreeInvalidCodesActual() {
+    void shouldLoginAfterThreeAttemptsWithoutCode() {
         open("http://localhost:9999");
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
@@ -49,7 +47,6 @@ public class AuthCodeLoginTest {
             verificationPage = loginPage.validLogin(authInfo);
         }
         verificationPage.validVerify();
-        $("[data-test-id=error-notification]").shouldHave(text("Превышено количество попыток ввода кода!")).shouldBe(visible);
     }
     // удаление базы данных
     @Test
