@@ -34,8 +34,9 @@ public class DataHelper {
     public static AuthInfo getAuthInfo() {
         return new AuthInfo("vasya", "qwerty123");
     }
+
     @Value
-    public static class VerificationCode{
+    public static class VerificationCode {
         String code;
     }
 

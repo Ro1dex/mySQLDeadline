@@ -1,4 +1,5 @@
 
+import com.codeborne.selenide.SelenideElement;
 import data.AuthCode;
 import data.DataHelper;
 import org.junit.jupiter.api.Test;
@@ -8,9 +9,12 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+
 //!! Не тестировать все тесты вместе !!
 public class AuthCodeLoginTest {
-
+    SelenideElement notify = $("[data-test-id=error-notification]");
+    String errorCode = "Неверно указан код! Попробуйте ещё раз.";
+    String errorAttempt = "Превышено количество попыток ввода кода!";
     //!!!после каждого отдельного теста удалять базу данных и перезапускать SUT!!!
 
     @Test
@@ -21,6 +25,7 @@ public class AuthCodeLoginTest {
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.validVerify();
     }
+
     @Test
     void shouldBlockedAfterThreeInvalidCodesExpected() {
         open("http://localhost:9999");
@@ -28,11 +33,11 @@ public class AuthCodeLoginTest {
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.invalidVerify();
-        $("[data-test-id=error-notification]").shouldHave(text("Неверно указан код! Попробуйте ещё раз.")).shouldBe(visible);
+        notify.shouldHave(text(errorCode)).shouldBe(visible);
         verificationPage.invalidVerify();
-        $("[data-test-id=error-notification]").shouldHave(text("Неверно указан код! Попробуйте ещё раз.")).shouldBe(visible);
+        notify.shouldHave(text(errorCode)).shouldBe(visible);
         verificationPage.invalidVerify();
-        $("[data-test-id=error-notification]").shouldHave(text("Превышено количество попыток ввода кода!")).shouldBe(visible);
+        notify.shouldHave(text(errorAttempt)).shouldBe(visible);
     }
 
     @Test
@@ -48,6 +53,7 @@ public class AuthCodeLoginTest {
         }
         verificationPage.validVerify();
     }
+
     // удаление базы данных
     @Test
     void shouldCleanDB() {
