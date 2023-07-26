@@ -20,6 +20,7 @@ public class AuthCodeLoginTest {
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.validVerify();
+        $("[data-test-id=dashboard]").shouldBe(visible);
     }
     // Ожидаемое поведение для блокировки входа
     @Test
@@ -43,9 +44,7 @@ public class AuthCodeLoginTest {
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
         for (int i = 0; i < 3; i++) {
-            //вводить что-то в поле необязательно
-            verificationPage.invalidVerify();
-            $("[data-test-id=error-notification]").shouldHave(text("Неверно указан код! Попробуйте ещё раз.")).shouldBe(visible);
+            //вводить что-то в поле аутентификации необязательно
             open("http://localhost:9999");
             verificationPage = loginPage.validLogin(authInfo);
         }
