@@ -42,5 +42,12 @@ public class AuthCode {
         runner.execute(connection, "DELETE FROM users");
     }
 
+    @SneakyThrows
+    public static void cleanAuthCodes() {
+        var connection = getConn();
+        runner.execute(connection, "DELETE FROM auth_codes");
+    }
+
+
 }
 
